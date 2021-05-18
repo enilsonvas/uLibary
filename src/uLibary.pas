@@ -10,6 +10,10 @@ type
                reqCondPagto,
                reqFormaPagto,
 
+               reqProd,
+               reqProdEmb,
+               reqProdPreco,
+
                reqPedidoId,
                reqPedido,
                reqPedidoItem,
@@ -39,6 +43,10 @@ begin
 
     reqPesqCliente: Result := '/pesqcliente';
     reqPesqProduto: Result := '/pesqproduto';
+
+    reqProd       : Result := '/prod';
+    reqProdEmb    : Result := '/prodemb';
+    reqProdPreco  : Result := '/prodclasse';
   end;
 end;
 
