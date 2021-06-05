@@ -30,9 +30,9 @@ var
 begin
   aItem := TListBoxItem.Create(aCombo);
 
-  aItem.Parent := aCombo;
-  aItem.Name := aCombo.Name + IntToStr((aCombo.Items.Count + 1));
-  aItem.ItemData.Text := aText;
+  aItem.Parent          := aCombo;
+  aItem.Name            := aCombo.Name + IntToStr((aCombo.Items.Count + 1));
+  aItem.ItemData.Text   := aText;
   aItem.ItemData.Detail := aID;
 
   aCombo.Controls.Add(aItem)
