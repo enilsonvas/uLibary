@@ -29,7 +29,18 @@ uses
   uTipos;
 
 
-  type
+type
+  TClassePreco = class
+  private
+    FPreco: Double;
+    FClasse: string;
+    procedure SetClasse(const Value: string);
+    procedure SetPreco(const Value: Double);
+  published
+    property Classe: string read FClasse write SetClasse;
+    property Preco: Double read FPreco write SetPreco;
+  end;
+
     TProcedureExcept = reference to procedure(const aException: string);
 
     function MessageSystem(aMsg: string; IconMsg: TpIconMsg; AButtons: TpBtnsMsg; AButtonsDef: TpBtnMsg): TpBtnMsg;
@@ -371,6 +382,18 @@ begin
               {fim});
   LThread.FreeOnTerminate := True;
   LThread.Start;
+end;
+
+{ TClassePreco }
+
+procedure TClassePreco.SetClasse(const Value: string);
+begin
+  FClasse := Value;
+end;
+
+procedure TClassePreco.SetPreco(const Value: Double);
+begin
+  FPreco := Value;
 end;
 
 end.
