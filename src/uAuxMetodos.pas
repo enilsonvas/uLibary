@@ -43,7 +43,8 @@ type
 
     TProcedureExcept = reference to procedure(const aException: string);
 
-    function MessageSystem(aMsg: string; IconMsg: TpIconMsg; AButtons: TpBtnsMsg; AButtonsDef: TpBtnMsg): TpBtnMsg;
+
+//    function MessageSystem(aMsg: string; IconMsg: TpIconMsg; AButtons: TpBtnsMsg; AButtonsDef: TpBtnMsg): TpBtnMsg;
 
     procedure AbrirTela(aTForm: TComponentClass; var aForm);
     procedure FechaTela(var aForm);
@@ -69,70 +70,34 @@ type
 
     function GetFiltroData(aDt1, aDt2: TDateTime; aCampo: string; aFiltro: string=''): string;
 
-    function ValorFormartado(aValue: Double): string;
+    function ValorFormartado(aValue: Double; Currency: Boolean=false): string;
+
+    function MsgSystem(aMsg, aTitulo: string; aIcon: TpIconMsg; aButton: array of TpBtnMsg): TpBtnMsg;
 
 var
   Ld: LoadTela;
-
+  aBtnRes : TBtnResult;
 
 implementation
 
-uses uFrmBase;
+uses uFrmBase, uFrmMsg;
 
-function MessageSystem(aMsg: string; IconMsg: TpIconMsg; AButtons: TpBtnsMsg;
-  AButtonsDef: TpBtnMsg): TpBtnMsg;
-var
-  rIconMsg: System.UITypes.TMsgDlgType;
-  rButtonDef: System.UITypes.TMsgDlgBtn;
-  mrButon: TModalResult;
-  rButtons: TMsgDlgButtons;
+function MsgSystem(aMsg, aTitulo: string; aIcon: TpIconMsg; aButton: array of TpBtnMsg): TpBtnMsg;
 begin
-  case IconMsg of
-    icConfimation:
-      rIconMsg := System.UITypes.TMsgDlgType.mtConfirmation;
-    icInfo:
-      rIconMsg := System.UITypes.TMsgDlgType.mtInformation;
-    icError:
-      rIconMsg := System.UITypes.TMsgDlgType.mtWarning;
-  end;
 
-  case AButtonsDef of
-    btrYes:
-      rButtonDef := System.UITypes.TMsgDlgBtn.mbYes;
-    btrNo:
-      rButtonDef := System.UITypes.TMsgDlgBtn.mbNo;
-    btrCancel:
-      rButtonDef := System.UITypes.TMsgDlgBtn.mbCancel;
-  end;
+  if not Assigned(TForm(FormMsg)) then
+    Application.CreateForm(TFormMsg, FormMsg);
 
-  if AButtons = [btrYes, btrNo, btrCancel] then
-    rButtons := [System.UITypes.TMsgDlgBtn.mbYes,
-      System.UITypes.TMsgDlgBtn.mbNo, System.UITypes.TMsgDlgBtn.mbCancel]
-  else if AButtons = [btrYes, btrNo] then
-    rButtons := [System.UITypes.TMsgDlgBtn.mbYes,
-      System.UITypes.TMsgDlgBtn.mbNo]
-  else if AButtons = [btrYes] then
-    rButtons := [System.UITypes.TMsgDlgBtn.mbYes]
-  else if AButtons = [btrNo] then
-    rButtons := [System.UITypes.TMsgDlgBtn.mbNo]
-  else if AButtons = [btrCancel] then
-    rButtons := [System.UITypes.TMsgDlgBtn.mbCancel];
+  FormMsg.CarregaIcon(aIcon);
+  FormMsg.CarregaBtn(aButton);
+  FormMsg.CarregaMsgCap(aMsg, aTitulo);
 
-  TDialogService.MessageDialog(aMsg, rIconMsg, rButtons, rButtonDef, 0,
-    procedure(const aResult: TModalResult)
-    begin
-      mrButon := aResult;
-    end);
+  if not Assigned(aBtnRes) then
+    aBtnRes := TBtnResult.Create;
 
-  case mrButon of
-    mrYes:
-      Result := btrYes;
-    mrNo:
-      Result := btrNo;
-    mrCancel:
-      Result := btrCancel;
-  end;
+  FormMsg.aBtnResult := aBtnRes;
 
+  FormBase.lytPrincipal.AddObject(FormMsg.lytFormMsg);
 end;
 
 procedure CarregaComboBox(aCombo: TComboBox; aDs: TDataSet; aID, aCampo: string);
@@ -185,9 +150,8 @@ begin
 
 
   FormLoad.rctPrincipal.Fill.Color := TAlphaColorRec.Alpha;
-
   FormLoad.rctPrincipal.Opacity := 99;
-  FormLoad.lblProcesso.Text     := aTextoLoad;
+  FormLoad.Mensagem.Text     := aTextoLoad;
 
   FormBase.lytPrincipal.AddObject(FormLoad.lyt);
 end;
@@ -311,9 +275,12 @@ begin
    aVbs.Visible := True;
 end;
 
-function ValorFormartado(aValue: Double): string;
+function ValorFormartado(aValue: Double; Currency: Boolean=false): string;
 begin
-  Result := FormatCurr(',#0.00', aValue);
+  if Currency then
+    Result := FormatCurr('R$ ,#0.00', aValue)
+  else
+    Result := FormatCurr(',#0.00', aValue);
 end;
 
 procedure MultiThead(aStart,

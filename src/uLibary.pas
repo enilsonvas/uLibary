@@ -15,14 +15,25 @@ uses
   end;
 
   TpVerbo = (aGet, aPost, aPut, aDelete, aPacht);
-  TpRequest = (reqQuery,
+  TpRequest = (reqConexao,
+               reqQuery,
                reqPagtoForma,
                reqPagtoPrazo,
                reqCidades,
-               reqProd,
-               reqProdEmb,
-               reqProdPreco,
 
+               //produtos
+               {$region}
+               reqProd,
+               reqProdId,
+
+               reqProdEmb,
+               reqProdEmbId,
+
+               reqProdPreco,
+               reqProdPrecoId,
+               {$endregion}
+
+               reqCliGet,
                reqCli,
                reqClieEnder,
                reqCliVend,
@@ -47,7 +58,8 @@ implementation
 function StrTpRequest(aRequest: TpRequest): string;
 begin
   case aRequest of
-    reqQuery: Result := '/query';
+    reqConexao: Result := '/conexao';
+    reqQuery  : Result := '/query';
 
     reqPagtoPrazo  : Result := '/prazopagto';
     reqPagtoForma  : Result := '/formapagto';
@@ -65,12 +77,17 @@ begin
     reqPesqProduto: Result := '/pesqproduto';
 
     reqProd       : Result := '/prod';
+    reqProdID     : Result := '/prod/:id';
+
     reqProdEmb    : Result := '/prodemb';
-    reqProdPreco  : Result := '/prodclasse';
+    reqProdEmbID  : Result := '/prodemb/:id';
 
-    reqCli        : Result := '/cli';
-    reqClieEnder  : Result := '/cliender';
+    reqProdPreco   : Result := '/prodclasse';
+    reqProdPrecoId : Result := '/prodclasse/:id';
 
+    reqCliGet        : Result := '/getcli';
+    reqCli           : Result := '/cli';
+    reqClieEnder     : Result := '/cliender';
     reqCliVend       : Result := '/clivend';
     reqClieEnderVend : Result := '/cliendervend';
 
