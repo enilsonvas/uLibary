@@ -8,6 +8,8 @@ uses
   System.UITypes,
   System.Classes,
   System.Variants,
+  System.Threading,
+
   Data.DB,
 
   FMX.Types,
@@ -19,12 +21,14 @@ uses
   FMX.Layouts,
   FMX.StdCtrls,
   FMX.DialogService,
-
+  FMX.VirtualKeyboard,
+  FMX.Platform,
+  FMX.ListBox,
+  FMX.TabControl,
 
   uFrmLoad,
   DataSetConverter4D.Helper,
   uThrdLoad,
-  FMX.ListBox,
   uComboBox,
   uTipos;
 
@@ -42,6 +46,7 @@ type
   end;
 
     TProcedureExcept = reference to procedure(const aException: string);
+
 
 
 //    function MessageSystem(aMsg: string; IconMsg: TpIconMsg; AButtons: TpBtnsMsg; AButtonsDef: TpBtnMsg): TpBtnMsg;
@@ -66,7 +71,7 @@ type
 
     procedure CarregaComboBox(aCombo: TComboBox; aDs: TDataSet; aID, aCampo: string);
     procedure SetComboValue(aCombo: TComboBox; aValue: string);
-    function GetComboValue(aCombo: TComboBox):string;
+    function  GetComboValue(aCombo: TComboBox):string;
 
     function GetFiltroData(aDt1, aDt2: TDateTime; aCampo: string; aFiltro: string=''): string;
 
@@ -74,13 +79,57 @@ type
 
     function MsgSystem(aMsg, aTitulo: string; aIcon: TpIconMsg; aButton: array of TpBtnMsg): TpBtnMsg;
 
+    function IsNumb(aText: string): Boolean;
+
+    procedure TrocaTab(aTbc: TTabControl; aTbSrc: TTabItem);
+
+    procedure EscondeTeclado;
+
+
 var
   Ld: LoadTela;
   aBtnRes : TBtnResult;
+  aProcExe: TProc;
+  ThrID: Integer;
 
 implementation
 
 uses uFrmBase, uFrmMsg;
+
+procedure EscondeTeclado;
+{$IFDEF ANDROID}
+var
+  FService: IFMXVirtualKeyboardService;
+{$ENDIF}
+begin
+  {$IFDEF ANDROID}
+  TPlatformServices.Current.SupportsPlatformService(IFMXVirtualKeyboardService, IInterface(FService));
+
+  if (FService <> nil) and
+     (TVirtualKeyboardState.Visible in FService.VirtualKeyboardState) then
+    FService.HideVirtualKeyboard;
+  {$ENDIF}
+end;
+
+function IsNumb(aText: string): Boolean;
+var
+  I:Integer;
+  Str: string;
+begin
+  Result := False;
+  Str := aText;
+
+  for I := 0 to Length(Str) do
+    begin
+      if not (Str[i] in ['0'..'9']) then
+        Result := True
+      else
+        begin
+          Result := False;
+          Break;
+        end;
+    end;
+end;
 
 function MsgSystem(aMsg, aTitulo: string; aIcon: TpIconMsg; aButton: array of TpBtnMsg): TpBtnMsg;
 begin
@@ -260,19 +309,19 @@ begin
   aVbs.Visible := False;
   aVbs.BeginUpdate;
   for I := pred(aVbs.Content.ChildrenCount) downto 0 do
-    begin
-      if (aVbs.Content.Children[i] is TRoundRect) then
-        begin
-          if not (TRoundRect(aVbs.Content.Children[i]).Name = aRectBase.Name) then
-            begin
-              IFrame := (aVbs.Content.Children[i] as TRoundRect);
-              IFrame.DisposeOf;
-              IFrame := nil;
-            end;
-        end;
-    end;
-   aVbs.EndUpdate;
-   aVbs.Visible := True;
+  begin
+    if (aVbs.Content.Children[i] is TRoundRect) then
+      begin
+        if not (TRoundRect(aVbs.Content.Children[i]).Name = aRectBase.Name) then
+          begin
+            IFrame := (aVbs.Content.Children[i] as TRoundRect);
+            IFrame.DisposeOf;
+            IFrame := nil;
+          end;
+      end;
+  end;
+  aVbs.EndUpdate;
+  aVbs.Visible := True;
 end;
 
 function ValorFormartado(aValue: Double; Currency: Boolean=false): string;
@@ -349,6 +398,12 @@ begin
               {fim});
   LThread.FreeOnTerminate := True;
   LThread.Start;
+  ThrID := LThread.ThreadID;
+end;
+
+procedure TrocaTab(aTbc: TTabControl; aTbSrc: TTabItem);
+begin
+  aTbc.ActiveTab := aTbSrc;
 end;
 
 { TClassePreco }
