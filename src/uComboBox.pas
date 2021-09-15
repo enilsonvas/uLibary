@@ -47,15 +47,15 @@ begin
   try
     aCombo.Items.Clear;
 
-    aItem := TListBoxItem.Create(aCombo);
-
-    aItem.Parent := aCombo;
-    aItem.Name   := aCombo.Name + IntToStr((aCombo.Items.Count + 1));
-
-    aItem.ItemData.Text   := '';
-    aItem.ItemData.Detail := '';
-
-    aCombo.Controls.Add(aItem);
+//    aItem := TListBoxItem.Create(aCombo);
+//
+//    aItem.Parent := aCombo;
+//    aItem.Name   := aCombo.Name + IntToStr((aCombo.Items.Count + 1));
+//
+//    aItem.ItemData.Text   := '';
+//    aItem.ItemData.Detail := '';
+//
+//    aCombo.Controls.Add(aItem);
 
     aData.DisableControls;
 
@@ -75,7 +75,7 @@ begin
         aData.Next;
       end;
 
-    aCombo.ItemIndex := 0;
+    aCombo.ItemIndex := -1;
   finally
     aData.EnableControls;
   end;

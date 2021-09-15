@@ -22,15 +22,34 @@ uses
   FireDAC.Comp.DataSet,
   FireDAC.Comp.Client;
 
-  procedure ConfigFDPrms(aDs: TFDQuery; aTpParam: TParamType; aTpField: TFieldType; aNmParam, aVlrParams: string);
+  procedure ConfigConnFD(aFDConn: TFDConnection; aDS: TFDQuery; aDbDrive, aPath, aUser, aSenha: string);
+  procedure ConfigFDPrms(aDs: TFDQuery; aTpParam: TParamType; aTpField: TFieldType; aNmParam, aVlrParams: string; aSize: Integer=0);
 
 implementation
 
-procedure ConfigFDPrms(aDs: TFDQuery; aTpParam: TParamType; aTpField: TFieldType; aNmParam, aVlrParams: string);
+procedure ConfigConnFD(aFDConn: TFDConnection; aDS: TFDQuery; aDbDrive, aPath, aUser, aSenha: string);
+begin
+//Database=D:\Vega System\Dados\QUALY\DISTRIBUICAO.FDB
+//User_Name=sysdba
+//Password=masterkey
+//DriverID=FB
+
+  aFDConn.Params.Values['DriverID']  := aDbDrive;
+  aFDConn.Params.Values['Database']  := aPath;
+  aFDConn.Params.Values['User_Name'] := aUser;
+  aFDConn.Params.Values['Password']  := aSenha;
+
+  aDS.Connection := aFDConn;
+
+end;
+
+procedure ConfigFDPrms(aDs: TFDQuery; aTpParam: TParamType; aTpField: TFieldType; aNmParam, aVlrParams: string; aSize: Integer);
 begin
   aDs.Params.BeginUpdate;
   aDs.Params.ParamByName(aNmParam).ParamType := aTpParam;
   aDs.Params.ParamByName(aNmParam).DataType  := aTpField;
+  if aSize > 0 then  
+    aDs.Params.ParamByName(aNmParam).Size      := aSize;
 
   case aTpField of
     ftString  : aDs.Params.ParamByName(aNmParam).AsString   := aVlrParams;
