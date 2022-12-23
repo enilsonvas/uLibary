@@ -58,7 +58,7 @@ uses
                //produtos
                {$region}
                reqProd,
-
+               reqProdImg,
                reqProdEmb,
                reqProdEmbId,
 
@@ -294,6 +294,7 @@ begin
     reqPesqProduto: Result := '/pesqproduto';
 
     reqProd       : Result := '/prod';
+    reqProdImg    : Result := '/prodimg';
     reqProdEmb    : Result := '/prodemb';
     reqProdEmbID  : Result := '/prodemb/:id';
 

@@ -52,8 +52,8 @@ type
 
 //    function MessageSystem(aMsg: string; IconMsg: TpIconMsg; AButtons: TpBtnsMsg; AButtonsDef: TpBtnMsg): TpBtnMsg;
 
-    procedure AbrirTela(aTForm: TComponentClass; var aForm);
-    procedure FechaTela(var aForm);
+    procedure AbrirTela(aTForm: TComponentClass; var aForm; aProc: TProc=nil);
+    procedure FechaTela(var aForm; aProc: TProc=nil);
 
     procedure AbrirTelaLoad(aTextoLoad: string);
     procedure FecharTelaLoad;
@@ -78,7 +78,7 @@ type
 
     function ValorFormartado(aValue: Double; Currency: Boolean=false): string;
 
-    function MsgSystem(aMsg, aTitulo: string; aIcon: TpIconMsg; aButton: array of TpBtnMsg): TpBtnMsg;
+    function MsgSystem(aMsg, aTitulo: string; aIcon: TpIconMsg; aButton: array of TpBtnMsg; aProc: TProc=nil): TpBtnMsg;
 
     function IsNumb(aText: string): Boolean;
 
@@ -133,7 +133,7 @@ begin
     end;
 end;
 
-function MsgSystem(aMsg, aTitulo: string; aIcon: TpIconMsg; aButton: array of TpBtnMsg): TpBtnMsg;
+function MsgSystem(aMsg, aTitulo: string; aIcon: TpIconMsg; aButton: array of TpBtnMsg; aProc: TProc=nil): TpBtnMsg;
 begin
 
   if not Assigned(TForm(FormMsg)) then
@@ -142,6 +142,7 @@ begin
   FormMsg.CarregaIcon(aIcon);
   FormMsg.CarregaBtn(aButton);
   FormMsg.CarregaMsgCap(aMsg, aTitulo);
+//  FormMsg.aProcExec := aProc;
 
   if not Assigned(aBtnRes) then
     aBtnRes := TBtnResult.Create;
@@ -174,7 +175,7 @@ begin
   SetIdComboBox(aCombo, aValue);
 end;
 
-procedure AbrirTela(aTForm: TComponentClass; var aForm);
+procedure AbrirTela(aTForm: TComponentClass; var aForm; aProc: TProc=nil);
 begin
   if not Assigned(TForm(aForm)) then
     Application.CreateForm(aTForm, aForm);
@@ -183,13 +184,19 @@ begin
     FormBase.lytPrincipal.Controls.Items[FormBase.lytPrincipal.ControlsCount-1].Visible := False;
 
   FormBase.lytPrincipal.AddObject((TForm(aForm).FindComponent('lyt'+TForm(aForm).Name) as TLayout));
+
+  if Assigned(aProc) then
+   aProc;
 end;
 
-procedure FechaTela(var aForm);
+procedure FechaTela(var aForm; aProc: TProc=nil);
 begin
   FormBase.lytPrincipal.RemoveObject((TForm(aForm).FindComponent('lyt'+TForm(aForm).Name) as TLayout));
 
   FormBase.lytPrincipal.Controls.Items[FormBase.lytPrincipal.ControlsCount-1].Visible := True;
+
+  if Assigned(aProc) then
+    aProc;
 
   FreeAndNil(TForm(aForm));
 end;
