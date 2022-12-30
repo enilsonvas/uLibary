@@ -28,7 +28,7 @@ uses
   FMX.TabControl,
 
   uFrmLoad,
-  DataSetConverter4D.Helper,
+  RESTRequest4D,
   uThrdLoad,
   uComboBox,
   uTipos;
@@ -57,6 +57,9 @@ type
 
     procedure AbrirTelaLoad(aTextoLoad: string);
     procedure FecharTelaLoad;
+
+    procedure PintaRectangle(Sender: TObject);
+    procedure DesPintaRectangle(Sender: TObject);
 
     procedure CloneRect(aRectBase: TRectangle; aVertScrooll: TVertScrollBox; var aPosicao: Single; aID: Integer); overload;
     procedure CloneRect(aRectBase: TRoundRect; aVertScrooll: TVertScrollBox; var aPosicao: Single; aID: Integer); overload;
@@ -97,6 +100,22 @@ var
 implementation
 
 uses uFrmBase, uFrmMsg;
+
+procedure PintaRectangle(Sender: TObject);
+begin
+  if Sender is TRectangle then
+    (Sender as TRectangle).Fill.Kind := TBrushKind.Gradient
+  else if Sender is TRoundRect then
+    (Sender as TRoundRect).Fill.Kind := TBrushKind.Gradient
+end;
+
+procedure DesPintaRectangle(Sender: TObject);
+begin
+  if Sender is TRectangle then
+    (Sender as TRectangle).Fill.Kind := TBrushKind.Solid
+  else if Sender is TRoundRect then
+    (Sender as TRoundRect).Fill.Kind := TBrushKind.Solid;
+end;
 
 procedure EscondeTeclado;
 {$IFDEF ANDROID}

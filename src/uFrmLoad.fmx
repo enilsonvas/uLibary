@@ -1,0 +1,65 @@
+object FormLoad: TFormLoad
+  Left = 0
+  Top = 0
+  BorderIcons = []
+  BorderStyle = None
+  Caption = 'Form1'
+  ClientHeight = 688
+  ClientWidth = 360
+  Fill.Color = claGray
+  Fill.Kind = Solid
+  Position = OwnerFormCenter
+  Transparency = True
+  FormFactor.Width = 320
+  FormFactor.Height = 480
+  FormFactor.Devices = [Desktop]
+  OnCreate = FormCreate
+  DesignerMasterStyle = 3
+  object lyt: TLayout
+    Align = Client
+    Size.Width = 360.000000000000000000
+    Size.Height = 688.000000000000000000
+    Size.PlatformDefault = False
+    TabOrder = 0
+    object rctPrincipal: TRectangle
+      Align = Client
+      Fill.Color = claGray
+      Size.Width = 360.000000000000000000
+      Size.Height = 688.000000000000000000
+      Size.PlatformDefault = False
+      object Mensagem: TLabel
+        Anchors = [akLeft, akTop, akRight]
+        StyledSettings = [FontColor]
+        Position.X = 8.000000000000000000
+        Position.Y = 88.000000000000000000
+        Size.Width = 345.000000000000000000
+        Size.Height = 161.000000000000000000
+        Size.PlatformDefault = False
+        TextSettings.Font.Family = 'Tahoma'
+        TextSettings.Font.Size = 20.000000000000000000
+        TextSettings.HorzAlign = Center
+        Text = 'Carregando Algo'
+        TabOrder = 1
+      end
+      object Arco: TArc
+        Anchors = [akLeft, akTop, akRight]
+        Margins.Left = 100.000000000000000000
+        Margins.Top = 100.000000000000000000
+        Margins.Right = 100.000000000000000000
+        Position.X = 100.000000000000000000
+        Position.Y = 356.000000000000000000
+        Size.Width = 160.000000000000000000
+        Size.Height = 160.000000000000000000
+        Size.PlatformDefault = False
+        Stroke.Thickness = 6.000000000000000000
+        Stroke.Dash = Dot
+        EndAngle = 400.000000000000000000
+      end
+    end
+    object Animacao: TFloatAnimation
+      Duration = 0.200000002980232200
+      StartValue = 0.000000000000000000
+      StopValue = 0.000000000000000000
+    end
+  end
+end
