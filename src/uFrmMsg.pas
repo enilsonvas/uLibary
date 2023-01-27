@@ -24,9 +24,8 @@ uses
   FMX.ImgList,
   FMX.Ani,
   FMX.ActnList,
-  uTipos;
-
-
+  uTipos,
+  uAuxMetodos;
 
 type
   TFormMsg = class(TForm)
@@ -36,36 +35,47 @@ type
     acCancel: TAction;
     acOK: TAction;
     ImageList1: TImageList;
-    lytFormMsg: TLayout;
-    rctPrincipal: TRectangle;
+    lyt: TLayout;
+    rectMsg: TRectangle;
     lytCaption: TLayout;
     imgCaption: TImage;
     lblCaption: TLabel;
-    lytBtnOk: TLayout;
-    rctOk: TRoundRect;
-    lblBtnOK: TLabel;
+    lytMsg: TLayout;
     lytBtn: TLayout;
-    rctbtnSim: TRoundRect;
-    lblBtnSim: TLabel;
-    rctBtnCancelar: TRoundRect;
-    lblBtnCancelar: TLabel;
-    rctBtnNao: TRoundRect;
-    lblBtnNao: TLabel;
     lblMsg: TLabel;
+    lytSimNaoCanc: TLayout;
+    rountRectSncSim: TRoundRect;
+    lblSim: TLabel;
+    rountRectSncNao: TRoundRect;
+    lblNao: TLabel;
+    rountRectSncCancelar: TRoundRect;
+    lblCancelar: TLabel;
+    lytSimNao: TLayout;
+    rountRectSnSim: TRoundRect;
+    Label1: TLabel;
+    rountRectSnNao: TRoundRect;
+    Label2: TLabel;
+    lytOk: TLayout;
+    rountRectOkOK: TRoundRect;
+    Label3: TLabel;
+    Rectangle1: TRectangle;
     procedure FormCreate(Sender: TObject);
     procedure acSimExecute(Sender: TObject);
     procedure acNaoExecute(Sender: TObject);
     procedure acCancelExecute(Sender: TObject);
     procedure acOKExecute(Sender: TObject);
+    procedure rountRectSncSimMouseEnter(Sender: TObject);
+    procedure rountRectSncSimMouseLeave(Sender: TObject);
   private
     { Private declarations }
     procedure SetIcon(aId: Integer);
-    procedure SetResult(aBtnResult: TpBtnMsg);
+    procedure SetResult(aBtn: TpBtnMsg);
   public
-    aBtnResult: TBtnResult;
+    aProc: TProc;
     procedure CarregaIcon(aIcon: TpIconMsg);
-    procedure CarregaBtn(aBtn: array of TpBtnMsg);
+    procedure CarregaBtn(aBtn: array of TpBtnIcon);
     procedure CarregaMsgCap(aTexto, aCaption: string);
+    procedure CarregaStyle(aStyle: TStyleBook);
     { Public declarations }
   end;
 
@@ -75,8 +85,6 @@ var
 implementation
 
 {$R *.fmx}
-
-uses  uAuxMetodos;
 
 { TFormMenssagem }
 
@@ -100,23 +108,36 @@ begin
   SetResult(btrSim);
 end;
 
-procedure TFormMsg.CarregaBtn(aBtn: array of TpBtnMsg);
+procedure TFormMsg.CarregaBtn(aBtn: array of TpBtnIcon);
 var
   I: Integer;
+  lSim, lNao, lCanc, lOk: Boolean;
 begin
-  for I := 0 to High(aBtn) do
+  lSim  := False;
+  lNao  := False;
+  lCanc := False;
+  lOk   := False;
+
+  lytSimNaoCanc.Visible := False;
+  lytSimNao.Visible     := False;
+  lytOk.Visible         := False;
+
+  for I := Low(aBtn) to High(aBtn) do
     begin
       case aBtn[i] of
-        btrSim     : rctbtnSim.Visible      := True;
-        btrNao     : rctBtnNao.Visible      := True;
-        btrCancelar: rctBtnCancelar.Visible := True;
-        btrOk      :
-          begin
-            lytBtnOk.Visible := True;
-            lytBtn.Visible   := False;
-          end;
+        btiSim     : lSim  := True;
+        btiNao     : lNao  := True;
+        btiOk      : lOk   := True;
+        btiCancelar: lCanc := True;
       end;
     end;
+
+  if lSim and lNao and lCanc then
+    lytSimNaoCanc.Visible := True
+  else if lSim and lNao then
+    lytSimNao.Visible := True
+  else if lOk then
+    lytOk.Visible := True
 end;
 
 procedure TFormMsg.CarregaIcon(aIcon: TpIconMsg);
@@ -135,24 +156,48 @@ begin
   lblMsg.Text     := aTexto;
 end;
 
+procedure TFormMsg.CarregaStyle(aStyle: TStyleBook);
+begin
+//  FormMsg.StyleBook := aStyle;
+//  FormMsg.UpdateStyleBook;
+  FormMsg.StyleLookup := 'backgroundstyle';
+  FormMsg.SetStyleBookWithoutUpdate(aStyle);
+  FormMsg.ApplyStyleLookup;
+end;
+
 procedure TFormMsg.FormCreate(Sender: TObject);
+var
+  LWhitSnc, LWhitSn: Integer;
 begin
 
-  rctbtnSim.Visible      := false;
-  rctBtnCancelar.Visible := false;
-  rctBtnCancelar.Visible := false;
-  lytBtnOk.Visible       := false;
+  rectMsg.Width       := lyt.Width;
+//  rectMsg.Align       := TAlignLayout.Center;
+//  rectMsg.Fill.Kind   := TBrushKind.Solid;
+//  rectMsg.Stroke.Kind := TBrushKind.None;
+  rectMsg.Visible     := true;
+  rectMsg.Opacity     := 99;
 
-  rctPrincipal.Width       := lytFormMsg.Width;
-  rctPrincipal.Opacity     := 0;
-  rctPrincipal.Visible     := true;
-  rctPrincipal.Align       := TAlignLayout.Center;
-  rctPrincipal.Fill.Kind   := TBrushKind.Solid;
-  rctPrincipal.Stroke.Kind := TBrushKind.None;
-  rctPrincipal.Visible     := true;
-  rctPrincipal.Opacity     := 99;
-  lytFormMsg.BringToFront;
+  lyt.BringToFront;
 
+  LWhitSnc := round(lytBtn.Width / 3);
+  LWhitSn  := round(lytBtn.Width / 2);
+
+  rountRectSncSim.Width      := LWhitSnc;
+  rountRectSncNao.Width      := LWhitSnc;
+  rountRectSncCancelar.Width := LWhitSnc;
+
+  rountRectSnSim.Margins.Left  := Round(lytBtn.Width / 14);
+  rountRectSnNao.Margins.Right := Round(lytBtn.Width / 14);
+end;
+
+procedure TFormMsg.rountRectSncSimMouseEnter(Sender: TObject);
+begin
+  PintaRectangle(Sender);
+end;
+
+procedure TFormMsg.rountRectSncSimMouseLeave(Sender: TObject);
+begin
+  DesPintaRectangle(Sender);
 end;
 
 procedure TFormMsg.SetIcon(aId: Integer);
@@ -171,8 +216,15 @@ begin
   imgCaption.MultiResBitmap.EndUpdate;
 end;
 
-procedure TFormMsg.SetResult(aBtnResult: TpBtnMsg);
+procedure TFormMsg.SetResult(aBtn: TpBtnMsg);
 begin
+  case aBtn of
+    btrSim,btrOk:
+      begin
+        if Assigned(aProc) then
+          aProc;
+      end;
+  end;
   FechaTela(FormMsg);
 end;
 

@@ -35,67 +35,52 @@ uses
 
 
 type
-  TClassePreco = class
-  private
-    FPreco: Double;
-    FClasse: string;
-    procedure SetClasse(const Value: string);
-    procedure SetPreco(const Value: Double);
-  published
-    property Classe: string read FClasse write SetClasse;
-    property Preco: Double read FPreco write SetPreco;
-  end;
+  TProcedureExcept = reference to procedure(const aException: string);
 
-    TProcedureExcept = reference to procedure(const aException: string);
+  procedure AbrirTela(aTForm: TComponentClass; var aForm; aCaption: string='';  aProc: TProc=nil);
+  procedure FechaTela(var aForm; aProc: TProc=nil);
+
+  procedure PintaRectangle(Sender: TObject);
+  procedure DesPintaRectangle(Sender: TObject);
+
+  procedure CloneRect(aRectBase: TRectangle; aVertScrooll: TVertScrollBox; var aPosicao: Single; aID: Integer); overload;
+  procedure CloneRect(aRectBase: TRoundRect; aVertScrooll: TVertScrollBox; var aPosicao: Single; aID: Integer); overload;
+
+  procedure LimpaListVbs(aRectBase: TRectangle; aVbs: TVertScrollBox); overload;
+  procedure LimpaListVbs(aRectBase: TRoundRect; aVbs: TVertScrollBox); overload;
+
+  procedure MultiThead(aStart,
+                       AProcesso,
+                       aTerminte: TProc;
+                       AError   : TProcedureExcept = nil;
+                       aCompleteInError: Boolean= true);
+
+  procedure AbrirTelaLoad;
+  procedure FecharTelaLoad;
 
 
+  procedure CarregaComboBox(aCombo: TComboBox; aDs: TDataSet; aID, aCampo: string);
+  procedure SetComboValue(aCombo: TComboBox; aValue: string);
+  function  GetComboValue(aCombo: TComboBox):string;
 
-//    function MessageSystem(aMsg: string; IconMsg: TpIconMsg; AButtons: TpBtnsMsg; AButtonsDef: TpBtnMsg): TpBtnMsg;
+  function GetFiltroData(aDt1, aDt2: TDateTime; aCampo: string; aFiltro: string=''): string;
 
-    procedure AbrirTela(aTForm: TComponentClass; var aForm; aProc: TProc=nil);
-    procedure FechaTela(var aForm; aProc: TProc=nil);
+  function ValorFormartado(aValue: Double; Currency: Boolean=false): string;
 
-    procedure AbrirTelaLoad(aTextoLoad: string);
-    procedure FecharTelaLoad;
+  procedure MsgSystem(aMsg, aTitulo: string;
+                      aIcon: TpIconMsg;
+                      aButton: array of TpBtnIcon;
+                      aStyle: TStyleBook=nil;
+                      aProc: TProc=nil);
 
-    procedure PintaRectangle(Sender: TObject);
-    procedure DesPintaRectangle(Sender: TObject);
+  function IsNumb(aText: string): Boolean;
 
-    procedure CloneRect(aRectBase: TRectangle; aVertScrooll: TVertScrollBox; var aPosicao: Single; aID: Integer); overload;
-    procedure CloneRect(aRectBase: TRoundRect; aVertScrooll: TVertScrollBox; var aPosicao: Single; aID: Integer); overload;
-
-    procedure LimpaListVbs(aRectBase: TRectangle; aVbs: TVertScrollBox); overload;
-    procedure LimpaListVbs(aRectBase: TRoundRect; aVbs: TVertScrollBox); overload;
-
-    procedure MultiThead(aStart,
-                         AProcesso,
-                         aTerminte: TProc;
-                         AError   : TProcedureExcept = nil;
-                         aCompleteInError: Boolean= true);
-
-    procedure CarregaComboBox(aCombo: TComboBox; aDs: TDataSet; aID, aCampo: string);
-    procedure SetComboValue(aCombo: TComboBox; aValue: string);
-    function  GetComboValue(aCombo: TComboBox):string;
-
-    function GetFiltroData(aDt1, aDt2: TDateTime; aCampo: string; aFiltro: string=''): string;
-
-    function ValorFormartado(aValue: Double; Currency: Boolean=false): string;
-
-    function MsgSystem(aMsg, aTitulo: string; aIcon: TpIconMsg; aButton: array of TpBtnMsg; aProc: TProc=nil): TpBtnMsg;
-
-    function IsNumb(aText: string): Boolean;
-
-    procedure TrocaTab(aTbc: TTabControl; aTbSrc: TTabItem);
-
-    procedure EscondeTeclado;
-
+  procedure EscondeTeclado;
 
 var
   Ld: LoadTela;
-  aBtnRes : TBtnResult;
   aProcExe: TProc;
   ThrID: Integer;
-
 
 implementation
 
@@ -152,23 +137,24 @@ begin
     end;
 end;
 
-function MsgSystem(aMsg, aTitulo: string; aIcon: TpIconMsg; aButton: array of TpBtnMsg; aProc: TProc=nil): TpBtnMsg;
+procedure MsgSystem(aMsg, aTitulo: string;
+                    aIcon: TpIconMsg;
+                    aButton: array of TpBtnIcon;
+                    aStyle: TStyleBook;
+                    aProc: TProc);
 begin
-
   if not Assigned(TForm(FormMsg)) then
     Application.CreateForm(TFormMsg, FormMsg);
+
+  FormMsg.CarregaStyle(aStyle);
 
   FormMsg.CarregaIcon(aIcon);
   FormMsg.CarregaBtn(aButton);
   FormMsg.CarregaMsgCap(aMsg, aTitulo);
-//  FormMsg.aProcExec := aProc;
 
-  if not Assigned(aBtnRes) then
-    aBtnRes := TBtnResult.Create;
+  FormMsg.aProc := aProc;
 
-  FormMsg.aBtnResult := aBtnRes;
-
-  FormBase.lytPrincipal.AddObject(FormMsg.lytFormMsg);
+  FormBase.lytPrincipal.AddObject(FormMsg.lyt);
 end;
 
 procedure CarregaComboBox(aCombo: TComboBox; aDs: TDataSet; aID, aCampo: string);
@@ -194,15 +180,22 @@ begin
   SetIdComboBox(aCombo, aValue);
 end;
 
-procedure AbrirTela(aTForm: TComponentClass; var aForm; aProc: TProc=nil);
+procedure AbrirTela(aTForm: TComponentClass; var aForm; aCaption: string; aProc: TProc);
+var
+  idx: Integer;
 begin
   if not Assigned(TForm(aForm)) then
     Application.CreateForm(aTForm, aForm);
 
+  idx := 0;
   if FormBase.lytPrincipal.ControlsCount > 0 then
-    FormBase.lytPrincipal.Controls.Items[FormBase.lytPrincipal.ControlsCount-1].Visible := False;
+    begin
+      FormBase.lytPrincipal.Controls.Items[FormBase.lytPrincipal.ControlsCount-1].Visible := False;
+      idx := FormBase.lytPrincipal.ControlsCount;
+    end;
 
-  FormBase.lytPrincipal.AddObject((TForm(aForm).FindComponent('lyt'+TForm(aForm).Name) as TLayout));
+  FormBase.lytPrincipal.InsertObject(idx,(TForm(aForm).FindComponent('lyt'+TForm(aForm).Name) as TLayout));
+  FormBase.lytPrincipal.Controls[idx].BringToFront;
 
   if Assigned(aProc) then
    aProc;
@@ -220,7 +213,7 @@ begin
   FreeAndNil(TForm(aForm));
 end;
 
-procedure AbrirTelaLoad(aTextoLoad: string);
+procedure AbrirTelaLoad;
 begin
  if not Assigned(FormLoad) then
    Application.CreateForm(TFormLoad, FormLoad);
@@ -228,7 +221,7 @@ begin
 
   FormLoad.rctPrincipal.Fill.Color := TAlphaColorRec.Alpha;
   FormLoad.rctPrincipal.Opacity := 99;
-  FormLoad.Mensagem.Text     := aTextoLoad;
+  FormLoad.Mensagem.Text        := 'Carregando dados';
 
   FormBase.lytPrincipal.AddObject(FormLoad.lyt);
 end;
@@ -368,8 +361,8 @@ procedure MultiThead(aStart,
 var
   LThread: TThread;
 begin
-  LThread := TThread.CreateAnonymousThread(
-              procedure ()
+
+ TTask.Run(procedure ()
                 var
                   LComplete: Boolean;
                 begin
@@ -391,7 +384,6 @@ begin
                       if Assigned(AProcesso) then
                         AProcesso;
 
-
                     except on E: Exception do
                       begin
                         LComplete := aCompleteInError;
@@ -410,7 +402,7 @@ begin
                     end;
 
                   finally
-                    //COMPLETO
+                  //COMPLETO
                     if Assigned(aTerminte) then
                       begin
                         TThread.Synchronize(
@@ -420,30 +412,67 @@ begin
                             aTerminte;
                           end);
                       end;
-
                   end;
-                end
-              {fim});
-  LThread.FreeOnTerminate := True;
-  LThread.Start;
-  ThrID := LThread.ThreadID;
+                end);
+
+//  LThread := TThread.CreateAnonymousThread(
+//              procedure ()
+//                var
+//                  LComplete: Boolean;
+//                begin
+//                  try
+//                    try
+//                      //INICIO
+//                      LComplete := true;
+//                      if Assigned(aStart) then
+//                        begin
+//                          TThread.Synchronize(
+//                            TThread.CurrentThread,
+//                            procedure ()
+//                            begin
+//                              aStart;
+//                            end);
+//                        end;
+//
+//                      //PRINCIPAL
+//                      if Assigned(AProcesso) then
+//                        AProcesso;
+//
+//                    except on E: Exception do
+//                      begin
+//                        LComplete := aCompleteInError;
+//
+//                        if Assigned(AError) then
+//                          begin
+//                            TThread.Synchronize(
+//                              TThread.CurrentThread,
+//                              procedure ()
+//                              begin
+//                                AError(e.Message);
+//                              end);
+//                          end;
+//
+//                      end;
+//                    end;
+//
+//                  finally
+//                  //COMPLETO
+//                    if Assigned(aTerminte) then
+//                      begin
+//                        TThread.Synchronize(
+//                          TThread.CurrentThread,
+//                          procedure ()
+//                          begin
+//                            aTerminte;
+//                          end);
+//                      end;
+//                  end;
+//                end
+//              {fim});
+//  LThread.FreeOnTerminate := True;
+//  LThread.Start;
+//  ThrID := LThread.ThreadID;
 end;
 
-procedure TrocaTab(aTbc: TTabControl; aTbSrc: TTabItem);
-begin
-  aTbc.ActiveTab := aTbSrc;
-end;
-
-{ TClassePreco }
-
-procedure TClassePreco.SetClasse(const Value: string);
-begin
-  FClasse := Value;
-end;
-
-procedure TClassePreco.SetPreco(const Value: Double);
-begin
-  FPreco := Value;
-end;
 
 end.
