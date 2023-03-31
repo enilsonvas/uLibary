@@ -22,7 +22,7 @@ uses
 
 type
   TFormLoad = class(TForm)
-    lyt: TLayout;
+    lytLoad: TLayout;
     Mensagem: TLabel;
     rctPrincipal: TRectangle;
     Animacao: TFloatAnimation;
@@ -67,7 +67,7 @@ begin
 
   // Arco da animacao...
   Arco.Visible          := true;
-  Arco.Parent           := lyt;
+  Arco.Parent           := lytLoad;
   Arco.Height           := Arco.Width;
 //  Arco.Width            := lyt.Width - 200;
 //  Arco.Margins.Top      := Mensagem.Width + trunc((lyt.Width - Arco.Width) / 2);
@@ -77,9 +77,9 @@ begin
 //  Arco.Position.Y       := trunc((lyt.Width - Arco.Height) / 2);
 //  Arco.Position.X       := trunc((lyt.Width - Arco.Width) / 2);
 
-  Arco.EndAngle         := 400;
+  Arco.EndAngle         := 150;
   Arco.Stroke.Color     := $FFFEFFFF;
-  Arco.Stroke.Thickness := 6;
+  Arco.Stroke.Thickness := 4;
 
   Animacao.Parent        := Arco;
   Animacao.StartValue    := 0;
@@ -92,8 +92,9 @@ begin
   Animacao.Start;
 
   rctPrincipal.AnimateFloat('Opacity', 0.7);
-  lyt.AnimateFloat('Opacity', 1);
-  lyt.BringToFront;
+  lytLoad.AnimateFloat('Opacity', 1);
+  lytLoad.BringToFront;
+  lytLoad.Align := TAlignLayout.Contents;
 end;
 
 end.

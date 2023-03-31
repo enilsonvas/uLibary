@@ -23,9 +23,13 @@ uses
   FMX.ExtCtrls,
   FMX.ImgList,
   FMX.Ani,
-  FMX.ActnList,
-  uTipos,
-  uAuxMetodos;
+  FMX.ActnList
+  {$IFDEF IGREJA THEN}
+  ,uTiposIgreja
+  {$ELSE}
+  ,uTipos
+  {$ENDIF}
+  ,uAuxMetodos;
 
 type
   TFormMsg = class(TForm)

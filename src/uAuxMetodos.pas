@@ -25,14 +25,18 @@ uses
   FMX.VirtualKeyboard,
   FMX.Platform,
   FMX.ListBox,
-  FMX.TabControl,
+  FMX.TabControl
 
-  uFrmLoad,
+  {$IFDEF IGREJA THEN}
+  ,uTiposIgreja
+  {$ELSE}
+  ,uTipos
+  {$ENDIF}
+
+  ,uFrmLoad,
   RESTRequest4D,
   uThrdLoad,
-  uComboBox,
-  uTipos;
-
+  uComboBox;
 
 type
   TProcedureExcept = reference to procedure(const aException: string);
@@ -46,6 +50,8 @@ type
   procedure CloneRect(aRectBase: TRectangle; aVertScrooll: TVertScrollBox; var aPosicao: Single; aID: Integer); overload;
   procedure CloneRect(aRectBase: TRoundRect; aVertScrooll: TVertScrollBox; var aPosicao: Single; aID: Integer); overload;
 
+  procedure ClonaListBox(aListBox: TListBox; aListBoxItemBase: TListBoxItem; aCodigo, aDescricao: string);
+
   procedure LimpaListVbs(aRectBase: TRectangle; aVbs: TVertScrollBox); overload;
   procedure LimpaListVbs(aRectBase: TRoundRect; aVbs: TVertScrollBox); overload;
 
@@ -55,9 +61,8 @@ type
                        AError   : TProcedureExcept = nil;
                        aCompleteInError: Boolean= true);
 
-  procedure AbrirTelaLoad;
-  procedure FecharTelaLoad;
-
+  procedure AbrirTelaLoad(aLyt: TLayout=nil);
+  procedure FecharTelaLoad(aLyt: TLayout=nil);
 
   procedure CarregaComboBox(aCombo: TComboBox; aDs: TDataSet; aID, aCampo: string);
   procedure SetComboValue(aCombo: TComboBox; aValue: string);
@@ -79,12 +84,27 @@ type
 
 var
   Ld: LoadTela;
-  aProcExe: TProc;
+  aProcTeclado, aProcBackButton: TProc;
   ThrID: Integer;
 
 implementation
 
 uses uFrmBase, uFrmMsg;
+
+procedure ClonaListBox(aListBox: TListBox; aListBoxItemBase: TListBoxItem; aCodigo, aDescricao: string);
+var
+  LListClone: TListBoxItem;
+begin
+  LListClone := TListBoxItem(aListBoxItemBase.Clone(aListBox));
+
+  LListClone.Parent          := aListBox;
+  LListClone.ItemData.Detail := aCodigo;
+  LListClone.ItemData.Text   := aDescricao;
+  LListClone.Visible         := true;
+  LListClone.Tag             := aCodigo.ToInteger;
+
+  aListBox.Content.AddObject(LListClone);
+end;
 
 procedure PintaRectangle(Sender: TObject);
 begin
@@ -194,8 +214,16 @@ begin
       idx := FormBase.lytPrincipal.ControlsCount;
     end;
 
-  FormBase.lytPrincipal.InsertObject(idx,(TForm(aForm).FindComponent('lyt'+TForm(aForm).Name) as TLayout));
-  FormBase.lytPrincipal.Controls[idx].BringToFront;
+  if TForm(aForm).FindComponent('lyt'+TForm(aForm).Name) <> nil then
+    begin
+      FormBase.lytPrincipal.InsertObject(idx,(TForm(aForm).FindComponent('lyt'+TForm(aForm).Name) as TLayout));
+      FormBase.lytPrincipal.Controls[idx].BringToFront;
+    end
+  else
+    raise Exception.Create('componente layout não configurado.');
+
+  if TForm(aForm).FindComponent('lblTitulo') <> nil then
+    TLabel(TForm(aForm).FindComponent('lblTitulo')).Text := aCaption;
 
   if Assigned(aProc) then
    aProc;
@@ -205,7 +233,8 @@ procedure FechaTela(var aForm; aProc: TProc=nil);
 begin
   FormBase.lytPrincipal.RemoveObject((TForm(aForm).FindComponent('lyt'+TForm(aForm).Name) as TLayout));
 
-  FormBase.lytPrincipal.Controls.Items[FormBase.lytPrincipal.ControlsCount-1].Visible := True;
+  if FormBase.lytPrincipal.ControlsCount > 0 then
+    FormBase.lytPrincipal.Controls.Items[FormBase.lytPrincipal.ControlsCount-1].Visible := True;
 
   if Assigned(aProc) then
     aProc;
@@ -213,7 +242,7 @@ begin
   FreeAndNil(TForm(aForm));
 end;
 
-procedure AbrirTelaLoad;
+procedure AbrirTelaLoad(aLyt: TLayout);
 begin
  if not Assigned(FormLoad) then
    Application.CreateForm(TFormLoad, FormLoad);
@@ -223,14 +252,20 @@ begin
   FormLoad.rctPrincipal.Opacity := 99;
   FormLoad.Mensagem.Text        := 'Carregando dados';
 
-  FormBase.lytPrincipal.AddObject(FormLoad.lyt);
+  if aLyt = nil then
+    FormBase.lytPrincipal.AddObject(FormLoad.lytLoad)
+  else
+    aLyt.AddObject(FormLoad.lytLoad);
 end;
 
-procedure FecharTelaLoad;
+procedure FecharTelaLoad(aLyt: TLayout);
 begin
-  FormBase.lytPrincipal.RemoveObject(FormLoad.lyt);
-  FormLoad.DisposeOf;
-  FormLoad := nil;
+  if aLyt = nil then
+    FormBase.lytPrincipal.RemoveObject(FormLoad.lytLoad)
+  else
+    aLyt.RemoveObject(FormLoad.lytLoad);
+
+  FreeAndNil(FormLoad);
 end;
 
 procedure CloneRect(aRectBase: TRectangle; aVertScrooll: TVertScrollBox; var aPosicao: Single; aID: Integer);
@@ -247,6 +282,7 @@ begin
   aRectClone.Height     := aRectBase.Height;
   aRectClone.Width      := aVertScrooll.Width - 12;
 
+
   for I := 0 to aRectBase.ChildrenCount -1 do
     begin
       if (aRectBase.Children.Items[i] is TImage) then
@@ -260,10 +296,11 @@ begin
 
   aRectClone.Opacity     := 1;
 
-  aRectClone.Visible := True;
   aPosicao := aPosicao + aRectBase.Height + 4;
 
-  aVertScrooll.AddObject(aRectClone);
+  aRectClone.Visible := True;
+
+  aVertScrooll.Content.AddObject(aRectClone);
 end;
 
 procedure CloneRect(aRectBase: TRoundRect; aVertScrooll: TVertScrollBox; var aPosicao: Single; aID: Integer);
@@ -304,9 +341,7 @@ var
   I: Integer;
   IFrame: TRectangle;
 begin
-  aVbs.Visible := False;
-  aVbs.BeginUpdate;
-  for I := pred(aVbs.Content.ChildrenCount) downto 0 do
+  for I := aVbs.Content.ChildrenCount-1 downto 0 do
     begin
       if (aVbs.Content.Children[i] is TRectangle) then
         begin
@@ -318,8 +353,6 @@ begin
             end;
         end;
     end;
-   aVbs.EndUpdate;
-   aVbs.Visible := True;
 end;
 
 procedure LimpaListVbs(aRectBase: TRoundRect; aVbs: TVertScrollBox); overload;

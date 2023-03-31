@@ -224,6 +224,17 @@ begin
 
     urlFlxSintetico: Result := '/flxsintetico';
     urlFlxAnalitico: Result := '/flxanalitico';
+
+    urlCliente      : Result := '/cliente';
+
+    urlProduto      : Result := '/prod';
+    urlProdutoEmb   : Result := '/prodemb';
+    urlProdutoPreco : Result := '/prodpreco';
+    urlProdutoImg   : Result := '/prodimg';
+
+    urlPedido       : Result := '/pedido';
+    urlPedidoItem   : Result := '/pedidoitem';
+    urlPedidoQry    : Result := '/pedidoqry';
   end;
 end;
 

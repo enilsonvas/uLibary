@@ -6,6 +6,7 @@ uses
   System.SysUtils,
 
   FMX.ListBox,
+  FMX.SearchBox,
 
   Data.DB;
 

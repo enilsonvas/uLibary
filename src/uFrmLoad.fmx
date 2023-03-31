@@ -15,7 +15,7 @@ object FormLoad: TFormLoad
   FormFactor.Devices = [Desktop]
   OnCreate = FormCreate
   DesignerMasterStyle = 3
-  object lyt: TLayout
+  object lytLoad: TLayout
     Align = Client
     Size.Width = 360.000000000000000000
     Size.Height = 688.000000000000000000
@@ -49,9 +49,8 @@ object FormLoad: TFormLoad
         Size.Width = 160.000000000000000000
         Size.Height = 160.000000000000000000
         Size.PlatformDefault = False
-        Stroke.Thickness = 6.000000000000000000
-        Stroke.Dash = Dot
-        EndAngle = 400.000000000000000000
+        Stroke.Thickness = 4.000000000000000000
+        EndAngle = 150.000000000000000000
       end
     end
     object Animacao: TFloatAnimation

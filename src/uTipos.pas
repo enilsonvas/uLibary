@@ -3,13 +3,19 @@ unit uTipos;
 interface
 
 type
+  //MENSAGEM
+  {$region}
   TpIconMsg = (mtWarning, mtError, mtInformation, mtConfirmation);
   TpBtnIcon = (btiNao, btiCancelar, btiSim, btiOk);
   TpBtnMsg  = (btrNao=0, btrCancelar=1, btrSim=2, btrOk=3);
+  {$endregion}
 
+  //RELATORIOS
+  {$region}
   tpDoc  = (RC, CX, PA, RE);
 
   tpFile = (fPDF, fXLSX, fDOC);
+
 
   TpRt = (rtPagGeral,
           rtPagAgrupado,
@@ -24,8 +30,10 @@ type
           rtRecGeral,
           rtRecAgrupCli,
           rtRecAgrupDia);
+  {$endregion}
 
-
+  //URL
+  {$region}
   tVerbo = (aGet, aPost, aPut, aDel, aPatch);
 
 
@@ -101,7 +109,44 @@ type
           urlDreDoc,
 
           urlFlxSintetico,
-          urlFlxAnalitico);
+          urlFlxAnalitico,
+
+          urlCliente,
+          urlProduto,
+          urlProdutoEmb,
+          urlProdutoPreco,
+          urlProdutoImg,
+
+          urlPedido,
+          urlPedidoItem,
+          urlPedidoQry);
+  {$endregion}
+
+  //TABELAS
+  {$region}
+  TpOperador= (tpcIgual, tpcLike, tpcBetween, tpcMenos, tpcMais, tpcDiferente, tpcMenosIgual, tpcMaisIgual);
+
+  tpTables = (tbUsuario,
+              tbCliente,
+              tbProdutos,
+              tbProdutosEmb,
+              tbProdutosPreco,
+              tbProdutosImg,
+
+              tbFomaPagto,
+              tbCondPagto,
+              tbOperacao,
+              tbPedidosQry,
+              tbPedidos,
+              tbPedidosItens,
+
+              tbContasReceber);
+
+  {$endregion}
+
+  //DIVERSOS
+  {$region}
+  tpIndex = (tpiNone, tpiNovo, tpiAdicao);
 
   TpFat = (tpfMult, tpfDiv);
   TpPrazo = (tSemanal, tMensal, tBimestral, tTrimestral, tAnual, tIntervalo);
@@ -187,6 +232,7 @@ type
 
     tsPrmFlxSintetico: array[0..1] of string=('FLUXO_EMPRESA', 'FLUXO_DTMOV');
     tsPrmFlxAnalitico: array[0..1] of string=('FLXSINT_EMPRESA', 'FLXSINT_DTMOV');
+    {$endregion}
 
 implementation
 

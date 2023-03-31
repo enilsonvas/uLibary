@@ -66,7 +66,7 @@ begin
   FormLoad.ClientHeight := FormBase.ClientHeight;
   FormLoad.ClientWidth  := FormBase.ClientWidth;
 
-  FormBase.lytPrincipal.AddObject(FormLoad.lyt);
+  FormBase.lytPrincipal.AddObject(FormLoad.lytLoad);
 end;
 
 procedure LoadTela.Execute;
