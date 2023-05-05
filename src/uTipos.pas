@@ -60,7 +60,16 @@ type
           urlBanco,
           urlContaGrupo,
           urlConta,
+
+          urlOperacaoVendas,
+          urlOperacaoVendasList,
+
           urlFormaPagto,
+          urlFormaPagtoList,
+
+          urlPrazoPagto,
+          urlPrazoPagtoList,
+
           urlEmpresa,
           urlEmpresaLogin,
           urlCCusto,
@@ -82,6 +91,7 @@ type
           urlPagCusto,
           urlPagDoc,
           urlPagContas,
+          urlPagBxGlobal,
 
           urlPagRtGeral,
           urlPagRtAgrupado,
@@ -93,6 +103,7 @@ type
           urlRecDoc,
           urlRecCCusto,
           urlRecContas,
+          urlRecBxGlobal,
 
           urlRecRtGeral,
           urlRecRtAgrupCli,
@@ -119,7 +130,9 @@ type
 
           urlPedido,
           urlPedidoItem,
-          urlPedidoQry);
+          urlPedidoQry,
+
+          urlOfx);
   {$endregion}
 
   //TABELAS
@@ -134,7 +147,7 @@ type
               tbProdutosImg,
 
               tbFomaPagto,
-              tbCondPagto,
+              tbPrazoPagto,
               tbOperacao,
               tbPedidosQry,
               tbPedidos,

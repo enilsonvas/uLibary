@@ -9,10 +9,11 @@ uses
   System.Classes,
   System.Variants,
   System.Threading,
+  System.Generics.Collections,
 
   Data.DB,
 
-
+  FMX.Edit,
   FMX.Types,
   FMX.Controls,
   FMX.Forms,
@@ -63,6 +64,7 @@ type
 
   procedure AbrirTelaLoad(aLyt: TLayout=nil);
   procedure FecharTelaLoad(aLyt: TLayout=nil);
+  procedure SetAba(aTbc: TTabControl; aTbi: TTabItem);
 
   procedure CarregaComboBox(aCombo: TComboBox; aDs: TDataSet; aID, aCampo: string);
   procedure SetComboValue(aCombo: TComboBox; aValue: string);
@@ -82,14 +84,52 @@ type
 
   procedure EscondeTeclado;
 
+  function InputMaskCnpjCpf(sValor: string): string;
+
+  function ThreadExecution(aProccessment: TProc) : TThread;
+  function LimparMascara(aText: string): string;
+
 var
   Ld: LoadTela;
-  aProcTeclado, aProcBackButton: TProc;
+  aProcTeclado, aProcBackButton, AfterTeclado: TProc;
   ThrID: Integer;
 
 implementation
 
 uses uFrmBase, uFrmMsg;
+
+function LimparMascara(aText: string): string;
+begin
+  Result := aText.Replace('R$', '').Replace('.', '').Trim;
+end;
+
+function ThreadExecution(aProccessment: TProc) : TThread;
+begin
+  Result := TThread.CreateAnonymousThread(
+  procedure
+  begin
+    aProccessment;
+  end);
+
+  Result.FreeOnTerminate := True;
+
+end;
+
+function InputMaskCnpjCpf(sValor: string): string;
+var
+  sTemp: string;
+begin
+  sTemp := sValor;
+  if Length(sTemp) = 14 then
+    Result := Copy(sTemp, 1, 2)+'.'+Copy(sTemp, 3, 3)+'.'+Copy(sTemp, 6, 3)+'/'+Copy(sTemp, 9, 4)+'-'+Copy(sTemp, 13, 2)
+  else if Length(sTemp) = 11 then
+    Result := Copy(sTemp, 1, 3)+'.'+Copy(sTemp, 4, 3)+'.'+Copy(sTemp, 7, 3)+'-'+Copy(sTemp, 10, 2);
+end;
+
+procedure SetAba(aTbc: TTabControl; aTbi: TTabItem);
+begin
+  aTbc.ActiveTab := aTbi;
+end;
 
 procedure ClonaListBox(aListBox: TListBox; aListBoxItemBase: TListBoxItem; aCodigo, aDescricao: string);
 var

@@ -154,14 +154,23 @@ begin
     urlPartCCusto       : Result := '/partccusto';
     urlParticipantePesq : Result := '/participantePesq';
 
-    urlbanco       : Result := '/banco';
-    urlConta       : Result := '/conta';
-    urlContaGrupo  : Result := '/contagrupo';
-    urlFormaPagto  : Result := '/formapagto';
-    urlEmpresa     : Result := '/empresa';
-    urlEmpresaLogin: Result := '/empresalogin';
-    urlCCusto      : Result := '/ccusto';
-    urlRegra       : Result := '/regra';
+    urlbanco         : Result := '/banco';
+    urlConta         : Result := '/conta';
+    urlContaGrupo    : Result := '/contagrupo';
+
+    urlFormaPagto    : Result := '/formapagto';
+    urlFormaPagtoList: Result := '/formapagtolist';
+
+    urlPrazoPagto    : Result := '/prazopagto';
+    urlPrazoPagtoList: Result := '/prazopagtolist';
+
+    urlOperacaoVendas    : Result := '/operacaovendas';
+    urlOperacaoVendasList: Result := '/operacaovendaslist';
+
+    urlEmpresa       : Result := '/empresa';
+    urlEmpresaLogin  : Result := '/empresalogin';
+    urlCCusto        : Result := '/ccusto';
+    urlRegra         : Result := '/regra';
 
     urlUser         : Result := '/user';
     urlUserEmp      : Result := '/useremp';
@@ -185,7 +194,7 @@ begin
     urlPagVolta             : Result := '/pagvolta';
     urlPagCusto             : Result := '/pagcusto';
     urlPagDoc               : Result := '/pagdoc';
-    urlPagContas            : Result := '/pagcontas';
+    urlPagBxGlobal          : Result := '/pagbxglobal';
 
     urlPagRtGeral           : Result := '/pagrtgeral';
     urlPagRtAgrupado        : Result := '/pagrtagrupado';
@@ -235,6 +244,8 @@ begin
     urlPedido       : Result := '/pedido';
     urlPedidoItem   : Result := '/pedidoitem';
     urlPedidoQry    : Result := '/pedidoqry';
+
+    urlOfx: Result := '/ofx';
   end;
 end;
 
