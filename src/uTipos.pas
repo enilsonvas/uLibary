@@ -108,6 +108,12 @@ type
           urlRecRtGeral,
           urlRecRtAgrupCli,
           urlRecRtAgrupDia,
+          urlRecData,
+          urlRecDataItem,
+
+          urlRecQry,
+          urlRecQryAgrupVenc,
+          urlRecQryAgrupPart,
 
           urlFechamento,
           urlFechaDiario,
@@ -132,7 +138,20 @@ type
           urlPedidoItem,
           urlPedidoQry,
 
-          urlOfx);
+          urlOfx,
+
+          urlGrafGeralFlxProjetado,
+
+          urlGrafGeralRecDesp,
+          urlGrafGeralRecDespDia,
+          urlGrafGeralRecDespMes,
+
+          urlGrafGeralMovContas,
+
+          urlGraficoContas,
+          urlGraficoContasDia,
+          urlGraficoContasMes,
+          urlGraficoContasAno);
   {$endregion}
 
   //TABELAS
@@ -159,6 +178,7 @@ type
 
   //DIVERSOS
   {$region}
+  tpAgrpGraf = (agDia, agMes, AgAno);
   tpIndex = (tpiNone, tpiNovo, tpiAdicao);
 
   TpFat = (tpfMult, tpfDiv);

@@ -6,6 +6,7 @@ uses
   System.SysUtils,
   System.StrUtils,
   System.Classes,
+  System.DateUtils,
   System.Variants,
   System.TypInfo,
   System.Rtti,
@@ -111,8 +112,20 @@ type
   function CCustoStrToPrm(aValue: string): tPrmCCusto;
   function CCustoPrmToStr(aValue: Variant): string;
 
+  procedure Erro(aErro: string);
+
 implementation
 
+
+procedure Erro(aErro: string);
+var
+  sMsg: TStringList;
+begin
+  sMsg := TStringList.Create;
+  sMsg.Add(aErro);
+  sMsg.SaveToFile(ExtractFilePath(ParamStr(0))+'Erro_'+now.Format('dd_mm_yyyy_hh_nn_ss')+'.txt');
+  sMsg.DisposeOf;
+end;
 
 procedure PreparaFiltro(aObj: TObject; aQuery: TQryList);
 var
@@ -207,9 +220,16 @@ begin
     urlRecCCusto        : Result := '/reccusto';
     urlRecContas        : Result := '/reccontas';
 
+    urlRecData      : Result := '/recdata';
+    urlRecDataItem  : Result := '/recdataitem';
+
     urlRecRtGeral   : Result := '/recrtgeral';
     urlRecRtAgrupCli: Result := '/recrtagrupcli';
     urlRecRtAgrupDia: Result := '/recrtagrupdia';
+
+    urlRecQry          : Result := '/recqry';
+    urlRecQryAgrupVenc : Result := '/recqryagrupvenc';
+    urlRecQryAgrupPart : Result := '/recqryagruppart';
 
     urlFechamento      : Result := '/fechamento';
     urlFechaDiario     : Result := '/fechadiario';
@@ -246,6 +266,18 @@ begin
     urlPedidoQry    : Result := '/pedidoqry';
 
     urlOfx: Result := '/ofx';
+
+    urlGrafGeralRecDesp   : Result := '/grafrecdesp';
+    urlGrafGeralRecDespDia: Result := '/grafrecdespdia';
+    urlGrafGeralRecDespMes: Result := '/grafrecdespmes';
+
+    urlGrafGeralMovContas: Result := '/grafmovcontas';
+
+    urlGrafGeralFlxProjetado : Result := '/grafflxprojdia';
+
+    urlGraficoContasDia: Result := '/grafcontasdia';
+    urlGraficoContasMes: Result := '/grafcontasmes';
+    urlGraficoContasAno: Result := '/grafcontasano';
   end;
 end;
 

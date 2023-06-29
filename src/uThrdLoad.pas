@@ -5,23 +5,30 @@ interface
 uses
   System.Classes, uFrmLoad, FMX.Forms, FMX.Layouts;
 
+{$IF DEF ANDROID THEN}
 type
   LoadTela = class(TThread)
   private
     FaTexto: string;
+
     procedure SetaTexto(const Value: string);
     procedure CarregaTela;
+
   public
     property aTexto: string read FaTexto write SetaTexto;
     procedure RemoveObj;
   protected
     procedure Execute; override;
   end;
+{$ENDIF}
 
 implementation
 
 uses
-  uFrmBase, System.UITypes;
+  {$IF DEF ANDROID THEN}
+  uFrmBase,
+  {$ENDIF}
+  System.UITypes;
 
 { 
   Important: Methods and properties of objects in visual components can only be
@@ -55,6 +62,7 @@ uses
 }
 
 { LoadTela }
+{$IF DEF ANDROID THEN}
 
 procedure LoadTela.CarregaTela;
 begin
@@ -87,5 +95,6 @@ begin
   FaTexto := Value;
 end;
 
+{$ENDIF}
 
 end.

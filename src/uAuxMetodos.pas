@@ -90,13 +90,17 @@ type
   function LimparMascara(aText: string): string;
 
 var
+  {$IF DEF ANDROID THEN}
   Ld: LoadTela;
+  {$ENDIF}
   aProcTeclado, aProcBackButton, AfterTeclado: TProc;
   ThrID: Integer;
 
 implementation
 
-uses uFrmBase, uFrmMsg;
+uses
+  uFrmBase,
+  uFrmMsg;
 
 function LimparMascara(aText: string): string;
 begin

@@ -38,7 +38,6 @@ uses
   function IncrementaSFiltro(aFiltro, sValor: string): string;
 
   procedure CarregamentoThread(AProcesso: TProc);
-
 var
   IconSistema: TMemoryStream;
 
@@ -56,7 +55,9 @@ begin
                         procedure ()
                         begin
                           Application.CreateForm(TFormTelaLoad, FormTelaLoad);
+                          {$IFDEF RELEASE THEN}
                           FormTelaLoad.Show;
+                          {$IFEND}
                         end);
 
                       //PRINCIPAL
