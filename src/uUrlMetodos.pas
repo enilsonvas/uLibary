@@ -167,8 +167,13 @@ begin
     urlPartCCusto       : Result := '/partccusto';
     urlParticipantePesq : Result := '/participantePesq';
 
-    urlbanco         : Result := '/banco';
+    urlBanco         : Result := '/banco';
+    urlBancoQry      : Result := '/bancoqry';
+
+    urlContaList     : Result := '/contalist';
     urlConta         : Result := '/conta';
+
+    urlContaGrupoList: Result := '/contagrupolist';
     urlContaGrupo    : Result := '/contagrupo';
 
     urlFormaPagto    : Result := '/formapagto';
@@ -182,14 +187,20 @@ begin
 
     urlEmpresa       : Result := '/empresa';
     urlEmpresaLogin  : Result := '/empresalogin';
+    urlEmpresaQry    : Result := '/empresaqry';
+
     urlCCusto        : Result := '/ccusto';
+    urlCCustoList    : Result := '/ccustolist';
+
     urlRegra         : Result := '/regra';
 
-    urlUser         : Result := '/user';
-    urlUserEmp      : Result := '/useremp';
-    urlUserLogin    : Result := '/userlogin';
-    urlUserEmpLogin : Result := '/urluseremplogin';
-    urlUserStructure: Result := '/urluserstructure';
+    urlUser            : Result := '/user';
+    urlUserAcesso      : Result := '/useracesso';
+    urlUserEmp         : Result := '/useremp';
+    urlUserLogin       : Result := '/userlogin';
+    urlUserEmpLogin    : Result := '/urluseremplogin';
+    urlUserStructure   : Result := '/urluserstructure';
+    urlUserEmpStructure: Result := '/urluserempstructure';
 
     urlEntCust      : Result := '/entcust';
     urlEntCustItem  : Result := '/entcustitem';
@@ -203,7 +214,9 @@ begin
 
     urlCxRtFechamento: Result := '/cxrtfechamento';
 
-    urlPagamento            : Result := '/pagamento';
+    urlPagamentoOrd         : Result := '/pagord';
+    urlPagamentoQry         : Result := '/pagqry';
+    urlPagamento            : Result := '/pag';
     urlPagVolta             : Result := '/pagvolta';
     urlPagCusto             : Result := '/pagcusto';
     urlPagDoc               : Result := '/pagdoc';
@@ -214,7 +227,8 @@ begin
     urlPagRtVencimento      : Result := '/pagrtvencimento';
     urlPagRtCCustoVencimento: Result := '/pagrtccustovencimento';
 
-    urlRecebimento      : Result := '/recebimento';
+    urlRecebimentoQry   : Result := '/recqry';
+    urlRecebimento      : Result := '/rec';
     urlRecVolta         : Result := '/recvolta';
     urlRecDoc           : Result := '/recdoc';
     urlRecCCusto        : Result := '/reccusto';
@@ -233,6 +247,8 @@ begin
 
     urlFechamento      : Result := '/fechamento';
     urlFechaDiario     : Result := '/fechadiario';
+    urlFechaDiarioConta: Result := '/fechadiarioconta';
+    urlFechaDiarioMov  : Result := '/fechadiariomov';
     urlFechaConciliacao: Result := '/fechaconciliacao';
 
     urlQuery       : Result := '/query';
@@ -256,7 +272,14 @@ begin
 
     urlCliente      : Result := '/cliente';
 
-    urlProduto      : Result := '/prod';
+    urlProduto        : Result := '/prod';
+    urlProdutoField   : Result := '/prodfields';
+    urlProdutoQry     : Result := '/prodqry';
+    urlProdutoGrupo   : Result := '/prodgrupo';
+    urlProdutoSubGrupo: Result := '/prodsubgrupo';
+    urlProdutoMarca   : Result := '/prodmarca';
+    urlProdutoSaldo   : Result := '/prodsaldo';
+
     urlProdutoEmb   : Result := '/prodemb';
     urlProdutoPreco : Result := '/prodpreco';
     urlProdutoImg   : Result := '/prodimg';
@@ -278,6 +301,19 @@ begin
     urlGraficoContasDia: Result := '/grafcontasdia';
     urlGraficoContasMes: Result := '/grafcontasmes';
     urlGraficoContasAno: Result := '/grafcontasano';
+
+    urlBiDre    : Result := '/bidre';
+    urlBiDreItem: Result := '/bidreitem';
+
+    urlBiFluxo    : Result := '/bifluxo';
+    urlBiFluxoItem: Result := '/bifluxotem';
+
+    urlAcbrConsCnpj : Result := '/conscnpj';
+    urlAcbrConsCpf  : Result := '/conscpf';
+    urlAcbrConsInsc : Result := '/consinsc';
+    urlAcbrConsCep  : Result := '/acbrconscep';
+
+    urlRepositoryImagem : Result := '/repimg';
   end;
 end;
 

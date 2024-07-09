@@ -3,6 +3,16 @@ unit uTipos;
 interface
 
 type
+  //BANCOS
+  {$region}
+  TpApiBanco = (apiSicoob, apiInter);
+  {$endregion}
+
+  //CLASSES
+  {$region}
+   tOrderRec = (RecOrdCont=0, RecOrdNome=1, RecOrdVenc=2, RecOrdPag=3, RecOrdVDoc=4, RecOrdVPag=5);
+  {$endregion}
+
   //MENSAGEM
   {$region}
   TpIconMsg = (mtWarning, mtError, mtInformation, mtConfirmation);
@@ -46,7 +56,9 @@ type
           urlUser,
           urlUserEmp,
           urlUserLogin,
+          urlUserAcesso,
           urlUserStructure,
+          urlUserEmpStructure,
           urlUserEmpLogin,
 
           urlQuery,
@@ -58,7 +70,12 @@ type
           urlParticipantePesq,
 
           urlBanco,
+          urlBancoQry,
+
           urlContaGrupo,
+          urlContaGrupoList,
+
+          urlContaList,
           urlConta,
 
           urlOperacaoVendas,
@@ -71,8 +88,12 @@ type
           urlPrazoPagtoList,
 
           urlEmpresa,
+          urlEmpresaQry,
           urlEmpresaLogin,
+
           urlCCusto,
+          urlCCustoList,
+
           urlRegra,
 
           urlEntCust,
@@ -86,6 +107,8 @@ type
           urlCaixaTransf,
           urlCxRtFechamento,
 
+          urlPagamentoOrd,
+          urlPagamentoQry,
           urlPagamento,
           urlPagVolta,
           urlPagCusto,
@@ -98,6 +121,7 @@ type
           urlPagRtVencimento,
           urlPagRtCCustoVencimento,
 
+          urlRecebimentoQry,
           urlRecebimento,
           urlRecVolta,
           urlRecDoc,
@@ -118,6 +142,8 @@ type
           urlFechamento,
           urlFechaDiario,
           urlFechaConciliacao,
+          urlFechaDiarioConta,
+          urlFechaDiarioMov,
 
           urlDre,
           urlDreItem,
@@ -129,7 +155,15 @@ type
           urlFlxAnalitico,
 
           urlCliente,
+
           urlProduto,
+          urlProdutoField,
+          urlProdutoQry,
+          urlProdutoGrupo,
+          urlProdutoSubGrupo,
+          urlProdutoMarca,
+          urlProdutoSaldo,
+
           urlProdutoEmb,
           urlProdutoPreco,
           urlProdutoImg,
@@ -151,7 +185,21 @@ type
           urlGraficoContas,
           urlGraficoContasDia,
           urlGraficoContasMes,
-          urlGraficoContasAno);
+          urlGraficoContasAno,
+
+          urlBiDre,
+          urlBiDreItem,
+
+          urlBiFluxo,
+          urlBiFluxoItem,
+
+          urlAcbrConsCnpj,
+          urlAcbrConsCpf,
+          urlAcbrConsInsc,
+
+          urlAcbrConsCep,
+
+          urlRepositoryImagem);
   {$endregion}
 
   //TABELAS
@@ -266,6 +314,7 @@ type
     tsPrmFlxSintetico: array[0..1] of string=('FLUXO_EMPRESA', 'FLUXO_DTMOV');
     tsPrmFlxAnalitico: array[0..1] of string=('FLXSINT_EMPRESA', 'FLXSINT_DTMOV');
     {$endregion}
+
 
 implementation
 

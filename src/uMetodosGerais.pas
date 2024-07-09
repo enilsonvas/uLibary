@@ -32,7 +32,7 @@ uses
   procedure ZeraCampos(aDs: TDataSet);
   procedure CalcValorXPerc(aTipo: TpCalc; Total: Double; var Valor: Double; var Perc: Double);
 
-  procedure CarregarTela(InstanceClass: TComponentClass; var Reference; Empresa: string; Maximizado: Boolean=true);
+  procedure CarregarTela(InstanceClass: TComponentClass; var Reference; Empresa: string=''; Maximizado: Boolean=true);
   procedure FecharTela(var Reference);
 
   function IncrementaSFiltro(aFiltro, sValor: string): string;
@@ -40,6 +40,7 @@ uses
   procedure CarregamentoThread(AProcesso: TProc);
 var
   IconSistema: TMemoryStream;
+  aFormBase: TForm;
 
 implementation
 
@@ -152,13 +153,10 @@ begin
   aList.Add('TO');
 end;
 
-procedure CarregarTela(InstanceClass: TComponentClass; var Reference; Empresa: string; Maximizado: Boolean=true);
+procedure CarregarTela(InstanceClass: TComponentClass; var Reference; Empresa: string=''; Maximizado: Boolean=true);
 begin
    if not Assigned(TForm(Reference)) then
     Application.CreateForm(InstanceClass, Reference);
-
-  if Maximizado then
-    TForm(Reference).WindowState    := TWindowState.wsMaximized;
 
   {$IFDEF RELEASE THEN}
   TForm(Reference).FormStyle    := fsStayOnTop;
@@ -166,8 +164,30 @@ begin
   TForm(Reference).FormStyle      := fsNormal;
   {$endif}
   TForm(Reference).DefaultMonitor := dmActiveForm;
-  TForm(Reference).Position       := poMainFormCenter;
-  TForm(Reference).Caption        := 'Tech Nil - '+Empresa+' - '+TForm(Reference).Caption;
+  if Empresa <> '' then
+    TForm(Reference).Caption        := 'Tech Nil - '+Empresa+' - '+TForm(Reference).Caption
+  else
+    TForm(Reference).Caption        := 'Tech Nil - '+TForm(Reference).Caption;
+
+
+  if Maximizado then
+    begin
+      TForm(Reference).WindowState := TWindowState.wsMaximized;
+
+      if aFormBase <> nil then
+        begin
+          TForm(Reference).WindowState := TWindowState.wsNormal;
+
+          TForm(Reference).Height := aFormBase.Height;
+          TForm(Reference).Width  := aFormBase.Width-50;
+          TForm(Reference).Left   := aFormBase.Left+50;
+          TForm(Reference).Top    := aFormBase.Top;
+        end
+      else
+        TForm(Reference).Position := poMainFormCenter;
+    end
+  else
+    TForm(Reference).Position := poMainFormCenter;
 
   if Assigned(IconSistema) then
     begin

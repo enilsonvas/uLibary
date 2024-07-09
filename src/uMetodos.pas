@@ -1,4 +1,4 @@
-unit uAuxMetodos;
+unit uMetodos;
 
 interface
 
@@ -35,7 +35,6 @@ uses
   {$ENDIF}
 
   ,uFrmLoad,
-  RESTRequest4D,
   uThrdLoad,
   uComboBox;
 
@@ -104,7 +103,6 @@ var
 implementation
 
 uses
-  uFrmBase,
   uFrmMsg;
 
 function LimparMascara(aText: string): string;
