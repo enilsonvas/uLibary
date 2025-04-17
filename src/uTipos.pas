@@ -54,12 +54,12 @@ type
           urlConsCdCnpj,
 
           urlUser,
+          urlUserQry,
           urlUserEmp,
           urlUserLogin,
-          urlUserAcesso,
-          urlUserStructure,
-          urlUserEmpStructure,
           urlUserEmpLogin,
+          urlUserStructure,
+          urlUserPermissoes,
 
           urlQuery,
           urlCidade,
@@ -87,9 +87,14 @@ type
           urlPrazoPagto,
           urlPrazoPagtoList,
 
-          urlEmpresa,
-          urlEmpresaQry,
-          urlEmpresaLogin,
+          urlEmp,
+          urlEmpQry,
+          urlEmpCombo,
+
+          urlEmpDados,
+          urlEmpDadosCombo,
+          urlEmpDadosList,
+          urlEmpDadosLogin,
 
           urlCCusto,
           urlCCustoList,
@@ -101,10 +106,14 @@ type
           urlEntCustCCusto,
 
           urlCaixa,
+          urlCaixaQry,
           urlCaixaDoc,
           urlCaixaCusto,
+          urlCaixaContas,
           urlCaixaSaldo,
           urlCaixaTransf,
+          urlCaixaFechamento,
+          urlCaixaFechamentoMv,
           urlCxRtFechamento,
 
           urlPagamentoOrd,
@@ -115,7 +124,7 @@ type
           urlPagDoc,
           urlPagContas,
           urlPagBxGlobal,
-
+  
           urlPagRtGeral,
           urlPagRtAgrupado,
           urlPagRtVencimento,
@@ -148,7 +157,7 @@ type
           urlDre,
           urlDreItem,
           urlDreTot,
-          urlDreGerencial,
+          urlDreMov,
           urlDreDoc,
 
           urlFlxSintetico,

@@ -2,6 +2,8 @@ unit uException;
 
 interface
 
+{$IFDEF MSWINDOWS}
+
 uses
   System.SysUtils,
   System.Classes,
@@ -17,8 +19,11 @@ type
     procedure GravarLog(value: String);
     procedure TrataException(Sender: TObject; E: Exception);
   end;
+{$ENDIF}
 
 implementation
+
+{$IFDEF MSWINDOWS}
 
 { TException }
 
@@ -65,4 +70,7 @@ initialization;
   MinhaException := TException.Create;
 finalization;
   MinhaException.Free;
+
+{$ENDIF}
+
 end.

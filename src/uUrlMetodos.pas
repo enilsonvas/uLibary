@@ -185,32 +185,41 @@ begin
     urlOperacaoVendas    : Result := '/operacaovendas';
     urlOperacaoVendasList: Result := '/operacaovendaslist';
 
-    urlEmpresa       : Result := '/empresa';
-    urlEmpresaLogin  : Result := '/empresalogin';
-    urlEmpresaQry    : Result := '/empresaqry';
+    urlEmp     : Result := '/emp';
+    urlEmpQry  : Result := '/empqry';
+    urlEmpCombo: Result := '/empcombo';
+
+    urlEmpDados     : Result := '/empdados';
+    urlEmpDadosCombo: Result := '/empdadoscombo';
+    urlEmpDadosList : Result := '/empdadoslist';
+    urlEmpDadosLogin: Result := '/empdadoslogin';
 
     urlCCusto        : Result := '/ccusto';
     urlCCustoList    : Result := '/ccustolist';
 
     urlRegra         : Result := '/regra';
 
-    urlUser            : Result := '/user';
-    urlUserAcesso      : Result := '/useracesso';
-    urlUserEmp         : Result := '/useremp';
-    urlUserLogin       : Result := '/userlogin';
-    urlUserEmpLogin    : Result := '/urluseremplogin';
-    urlUserStructure   : Result := '/urluserstructure';
-    urlUserEmpStructure: Result := '/urluserempstructure';
+    urlUser          : Result := '/user';
+    urlUserEmp       : Result := '/useremp';
+    urlUserLogin     : Result := '/userlogin';
+    urlUserEmpLogin  : Result := '/useremplogin';
+    urlUserQry       : Result := '/userqry';
+    urlUserStructure : Result := '/userstructure';
+    urlUserPermissoes: Result := '/userpermissoes';
 
     urlEntCust      : Result := '/entcust';
     urlEntCustItem  : Result := '/entcustitem';
     urlEntCustCCusto: Result := '/entcustccusto';
 
-    urlCaixa       : Result := '/caixa';
-    urlCaixaDoc    : Result := '/caixadoc';
-    urlCaixaCusto  : Result := '/caixacusto';
-    urlCaixaSaldo  : Result := '/caixasaldo';
-    urlCaixaTransf : Result := '/caixaTransf';
+    urlCaixa             : Result := '/caixa';
+    urlCaixaQry          : Result := '/caixaqry';
+    urlCaixaDoc          : Result := '/caixadoc';
+    urlCaixaCusto        : Result := '/caixacusto';
+    urlCaixaContas       : Result := '/contas';
+    urlCaixaSaldo        : Result := '/caixasaldo';
+    urlCaixaTransf       : Result := '/caixatransf';
+    urlCaixaFechamento   : Result := '/caixafechamento';
+    urlCaixaFechamentoMv : Result := '/caixafechamentomv';
 
     urlCxRtFechamento: Result := '/cxrtfechamento';
 
@@ -221,6 +230,7 @@ begin
     urlPagCusto             : Result := '/pagcusto';
     urlPagDoc               : Result := '/pagdoc';
     urlPagBxGlobal          : Result := '/pagbxglobal';
+    urlPagContas            : Result := '/pagcontas';
 
     urlPagRtGeral           : Result := '/pagrtgeral';
     urlPagRtAgrupado        : Result := '/pagrtagrupado';
@@ -263,7 +273,7 @@ begin
     urlDre         : Result := '/dre';
     urlDreItem     : Result := '/dreitem';
     urlDreTot      : Result := '/dretot';
-    urlDreGerencial: Result := '/dregerencial';
+    urlDreMov      : Result := '/dremov';
     urlDreDoc      : Result := '/dredoc';
 
 
@@ -362,11 +372,23 @@ end;
 function Enconde(aValue: string): string;
 begin
   Result := TBase64URLEncoding.Base64.Encode(aValue);
+
+//  {$IFDEF RELELASE THEN}
+//  Result := TBase64URLEncoding.Base64.Encode(aValue);
+//  {$ELSE}
+//  Result := aValue;
+//  {$IFEND}
 end;
 
 function Desenconde(aValue: string): string;
 begin
   Result := TBase64URLEncoding.Base64.Decode(aValue);
+
+//  {$IFDEF RELELASE THEN}
+//  Result := TBase64URLEncoding.Base64.Decode(aValue);
+//  {$ELSE}
+//  Result := aValue;
+//  {$IFEND}
 end;
 
 function StrtoTp(aValue: string; const AString: array of string; const AEnumerados: array of variant): OleVariant;
